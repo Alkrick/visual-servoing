@@ -1,8 +1,6 @@
 clear;
 close all;
 
-syms fx fy cx cy real
-
 %% params
 
 Pw = [0 0 0]';
