@@ -1,0 +1,27 @@
+function [outputArg1,outputArg2] = visualize(obj,Points,Proj)
+%VISUALIZE Summary of this function goes here
+%   Detailed explanation goes here
+subplot(1,2,1);
+s = fill3(obj.RetinaPlane_(1,:),obj.RetinaPlane_(2,:),obj.RetinaPlane_(3,:),'r','FaceAlpha',0.3);
+
+
+% s.EdgeColor = 'none';
+plotFrame(obj.Pc_,obj.Rc_,"C");
+
+
+plotFrame(P1,rotz(0),"P1")
+plotFrame(P2,rotz(0),"P2")
+plotFrame(P3,rotz(0),"P3")
+
+obj.drawLines([P1 P2 P3]);
+obj.plotProjection(Proj);
+axis equal
+
+subplot(1,2,2)
+ProjWorld = Proj;
+plot(ProjWorld(1,:),-ProjWorld(2,:),'bo');
+axis([-0.1 0.1 -0.1 0.1]);
+
+
+end
+
