@@ -58,9 +58,13 @@ classdef PinholeCamera
         end
         
         ProjPoints = getProjection(obj,Points);
-        [] = plotProjection(obj,Points);
         [] = drawLines(obj,Points);
         [] = visualize(obj,Points,Proj);
+        function [] = plotProjection(obj,WProjPoints)
+            if size(WProjPoints,1)>0
+                plot3(WProjPoints(1,:),WProjPoints(2,:),WProjPoints(3,:),'ko');            
+            end
+        end
             
     end
 end
