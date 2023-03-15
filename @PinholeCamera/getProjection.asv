@@ -7,12 +7,11 @@ ProjPoints = [];
 for i=1:size(Points,2)
     Ptemp = Tc^-1 * [Points(:,i); 1]; 
     P_tilde = M*Ptemp;
-    ProjPoint = [P_tilde(1)/Ptemp(3); P_tilde(2)/Ptemp(3);0];
+    ProjPoint = [P_tilde(1)/Ptemp(3); P_tilde(2)/Ptemp(3);1]
     WProjPoint = obj.Pr_ + obj.Rr_*ProjPoint;
     if abs(ProjPoint(1))<obj.ret_x_ && abs(ProjPoint(2))<obj.ret_y_
         if  norm(Points(:,i)-WProjPoint) < norm(Points(:,i)-obj.Pc_)
-            ProjPoint(3) = Ptemp(3);
-            ProjPoints = cat(2,ProjPoints,ProjPoint);   
+            ProjPoints(:,i) = ProjPoint; %#ok<*AGROW> 
         end
     end
 end

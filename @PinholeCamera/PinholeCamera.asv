@@ -24,36 +24,35 @@ classdef PinholeCamera
     end
     
     methods
-        function obj = PinholeCamera(Pc,eul,f,ret_x,ret_y)
+        function obj = PinholeCamera(Pc,Rc,f,ret_x,ret_y)
             %PINHOLECAMERA Construct an instance of this class
             %   Detailed explanation goes here
             obj.f_ = f;
             obj.ret_x_ = ret_x;
             obj.ret_y_ = ret_y;
             
-            obj.K_ = [f 0 0;
-                      0 f 0;
-                      0 0 1];
+            obj=update(obj,Pc,Rc);
             
-            obj=update(obj,Pc,eul);                       
-                 
+            obj.K_ = [f 0 0 0;
+                      0 f 0 0;
+                      0 0 1 0];
+                  
+            obj.M_ = diag([f,f,1]) * [eye(3), zeros(3,1)];
             obj.fig_ = figure();
         end
         %% 
         [imageProj] = getProjection(obj,Points);
         [] = drawLines(obj,Points);
         [] = visualize(obj,varargin);
-        function obj=update(obj,Pc,eul)
+        function obj=update(obj,Pc,Rc)
             obj.Pc_ = Pc;
-            obj.Eulc_ = eul;
-            obj.Rc_ = eul2rotm(eul');
-            obj.Tc_ = [obj.Rc_ Pc; 0 0 0 1];
+            obj.Rc_ = eul2;
+            obj.Eulc_ = rotm2eul(Rc);
+            obj.Tc_ = [Rc Pc; 0 0 0 1];
             
-            obj.Pr_ = Pc + obj.Rc_*[0 0 obj.f_]';
-            obj.Rr_ = obj.Rc_;
+            obj.Pr_ = Pc + Rc*[0 0 obj.f_]';
+            obj.Rr_ = Rc;
             obj.Tr_ = [obj.Rr_ obj.Pr_; 0 0 0 1];
-
-            obj.M_ = obj.K_ * [eye(3), zeros(3,1)];
             
             Pr_bl = obj.Pr_ + obj.Rr_*[-obj.ret_x_;-obj.ret_y_; 0];
             Pr_tl = obj.Pr_ + obj.Rr_*[-obj.ret_x_; obj.ret_y_; 0];
