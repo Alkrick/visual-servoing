@@ -1,6 +1,0 @@
-function [v] = computeControlLaw(obj,Le,err,Kd)
-%COMPUTECONTROLLAW Summary of this function goes here
-%   Detailed explanation goes here
-v = pinv(Le)*(-obj.lambda_*err - Kd*Le*v_);
-end
-
